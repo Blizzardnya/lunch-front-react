@@ -27,7 +27,9 @@ const productEntity = new schema.Entity(
 
 const productsAdapter = createEntityAdapter<Product>();
 
-const initialState = productsAdapter.getInitialState();
+const productsInitialState = productsAdapter.getInitialState({
+  isLoading: false,
+});
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
@@ -47,12 +49,20 @@ export const fetchProducts = createAsyncThunk(
 
 const productsSlice = createSlice({
   name: "products",
-  initialState,
+  initialState: productsInitialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchProducts.fulfilled, (state, action) => {
-      productsAdapter.setAll(state, action.payload.products);
-    });
+    builder
+      .addCase(fetchProducts.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchProducts.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(fetchProducts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        productsAdapter.setAll(state, action.payload.products);
+      });
   },
 });
 

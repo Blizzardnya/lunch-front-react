@@ -14,11 +14,15 @@ import { selectProductEntities } from "./productsSlice";
 
 const cartAdapter = createEntityAdapter<CartItem>();
 
+const cartInitialState = cartAdapter.getInitialState({
+  isLoading: false,
+});
+
 export const sendOrder = createAsyncThunk<
   void,
-  void,
+  { showMessage: () => void },
   { state: RootState; rejectValue: any }
->("cart/sendOrder", async (_, { getState, dispatch }) => {
+>("cart/sendOrder", async (payload, { getState, dispatch }) => {
   const data = {
     user: getState().account.username,
     products: selectAllCartItems(getState()).map((item) => {
@@ -31,6 +35,7 @@ export const sendOrder = createAsyncThunk<
   });
 
   if (response.status === 201) {
+    payload.showMessage();
     dispatch(clearCart());
     history.push("/account");
   }
@@ -38,7 +43,7 @@ export const sendOrder = createAsyncThunk<
 
 const cartSlice = createSlice({
   name: "cart",
-  initialState: cartAdapter.getInitialState(),
+  initialState: cartInitialState,
   reducers: {
     addItemToCart(state, action: PayloadAction<CartItem>) {
       const { id, quantity } = action.payload;
@@ -57,20 +62,18 @@ const cartSlice = createSlice({
       cartAdapter.removeAll(state);
     },
   },
-  //   extraReducers: (builder) => {
-  //     builder
-  //       .addCase(login.pending, (state) => {
-  //         state.isLoading = true;
-  //       })
-  //       .addCase(login.rejected, (state) => {
-  //         state.isLoading = false;
-  //       })
-  //       .addCase(login.fulfilled, (state, action) => {
-  //         state.loggedIn = true;
-  //         state.token = action.payload.data.id;
-  //         state.isLoading = false;
-  //       });
-  //   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(sendOrder.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(sendOrder.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(sendOrder.fulfilled, (state, action) => {
+        state.isLoading = false;
+      });
+  },
 });
 
 const { actions, reducer } = cartSlice;

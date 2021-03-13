@@ -3,6 +3,7 @@ import { Router, Switch, Route } from "react-router-dom";
 import "fontsource-roboto";
 import { PersistGate } from "redux-persist/es/integration/react";
 import { Provider } from "react-redux";
+import { SnackbarProvider } from "notistack";
 
 import ShopPage from "./pages/ShopPage";
 import LoginPage from "./pages/LoginPage";
@@ -32,19 +33,21 @@ function App() {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <Router history={history}>
-          <div className={classes.root}>
-            <nav>
-              <Navigation />
-            </nav>
-            <main className={classes.content}>
-              <Switch>
-                <Route path="/" component={ShopPage} exact />
-                <Route path="/cart" component={CartPage} />
-                <Route path="/account" component={AccountPage} />
-                <Route path="/login" component={LoginPage} />
-              </Switch>
-            </main>
-          </div>
+          <SnackbarProvider maxSnack={3}>
+            <div className={classes.root}>
+              <nav>
+                <Navigation />
+              </nav>
+              <main className={classes.content}>
+                <Switch>
+                  <Route path="/" component={ShopPage} exact />
+                  <Route path="/cart" component={CartPage} />
+                  <Route path="/account" component={AccountPage} />
+                  <Route path="/login" component={LoginPage} />
+                </Switch>
+              </main>
+            </div>
+          </SnackbarProvider>
         </Router>
       </PersistGate>
     </Provider>

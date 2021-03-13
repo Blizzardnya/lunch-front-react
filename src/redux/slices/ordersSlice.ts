@@ -1,8 +1,4 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  //   createSelector,
-} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { Order, OrdersInitialState } from "../../types/ordersTypes";
 import { RootState } from "../store";
@@ -10,6 +6,7 @@ import axios from "../../core/axios";
 
 const initialState: OrdersInitialState = {
   orders: [],
+  isLoading: false,
 };
 
 export const fetchOrders = createAsyncThunk<
@@ -31,23 +28,19 @@ const ordersSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchOrders.fulfilled, (state, action) => {
-      state.orders = action.payload.orders;
-    });
+    builder
+      .addCase(fetchOrders.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchOrders.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(fetchOrders.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.orders = action.payload.orders;
+      });
   },
 });
-
-// export const selectProductsByCategory = createSelector(
-//   selectAllProducts,
-//   (_: any, category: number | null) => category,
-//   (products, category) => {
-//     if (!category) {
-//       return products;
-//     } else {
-//       return products.filter((item) => item.category === category);
-//     }
-//   }
-// );
 
 const { reducer } = ordersSlice;
 

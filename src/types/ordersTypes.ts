@@ -12,4 +12,5 @@ export interface Order {
 
 export interface OrdersInitialState {
   orders: Order[];
+  isLoading: boolean;
 }

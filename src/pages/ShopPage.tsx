@@ -3,6 +3,7 @@ import { makeStyles, Container, Grid } from "@material-ui/core";
 
 import ProductCard from "../components/ProductCard";
 import CategoriesList from "../components/CategoriesList";
+import Loading from "../components/Loading";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import {
   fetchProducts,
@@ -40,6 +41,7 @@ const ShopPage: React.FC = () => {
     selectProductsByCategory(state, currentCategory)
   );
   const categories = useAppSelector((state) => selectAllCategories(state));
+  const productsLoading = useAppSelector((state) => state.products.isLoading);
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -47,6 +49,7 @@ const ShopPage: React.FC = () => {
 
   return (
     <>
+      <Loading isLoading={productsLoading} />
       <Container className={classes.cardGrid} maxWidth="xl">
         <Grid container spacing={3}>
           <Grid item xs={12} sm={8} md={9} lg={10}>
