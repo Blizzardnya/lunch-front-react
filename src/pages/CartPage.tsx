@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import {
   TableContainer,
   Table,
@@ -10,6 +10,7 @@ import {
   makeStyles,
   Container,
   Button,
+  TextField,
 } from "@material-ui/core";
 import { useSnackbar } from "notistack";
 
@@ -20,6 +21,7 @@ import {
   calcCartTotal,
   clearCart,
   sendOrder,
+  updateItemQuantity,
 } from "../redux/slices/cartSlice";
 import GreenButton from "../components/Buttons/GreenButton";
 import Loading from "../components/Loading";
@@ -45,15 +47,31 @@ const useStyles = makeStyles((theme) => ({
 const CartPage: React.FC = () => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
+  const { enqueueSnackbar } = useSnackbar();
+
   const cartItems = useAppSelector((state) => selectProductsInCart(state));
   const cartTotal = useAppSelector((state) => calcCartTotal(state));
   const isOrderSending = useAppSelector((state) => state.cart.isLoading);
-  const { enqueueSnackbar } = useSnackbar();
 
   const showSuccessMessage = () => {
     enqueueSnackbar("Заказ оформлен.", {
       variant: "success",
     });
+  };
+
+  const quantityChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    id: number
+  ) => {
+    const newQuantity = Number(e.target.value);
+    if (1 <= newQuantity && newQuantity <= 20) {
+      dispatch(
+        updateItemQuantity({
+          id,
+          quantity: Number(e.target.value),
+        })
+      );
+    }
   };
 
   return (
@@ -86,7 +104,18 @@ const CartPage: React.FC = () => {
                     {item.name}
                   </TableCell>
                   <TableCell align="right">{item.price}</TableCell>
-                  <TableCell align="right">{item.quantity}</TableCell>
+                  <TableCell align="right">
+                    <TextField
+                      id="quantity"
+                      type="number"
+                      size="small"
+                      margin="dense"
+                      variant="outlined"
+                      inputProps={{ min: 1, max: 20 }}
+                      onChange={(e) => quantityChange(e, item.id)}
+                      value={item.quantity}
+                    />
+                  </TableCell>
                   <TableCell align="right">
                     {(item.price * item.quantity).toFixed(2)}
                   </TableCell>

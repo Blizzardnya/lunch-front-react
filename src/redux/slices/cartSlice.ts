@@ -9,7 +9,7 @@ import {
 import { RootState } from "../store";
 import axios from "../../core/axios";
 import history from "../../core/history";
-import { CartItem } from "../../types/cartTypes";
+import { CartItem, UpdateQuantityPayload } from "../../types/cartTypes";
 import { selectProductEntities } from "./productsSlice";
 
 const cartAdapter = createEntityAdapter<CartItem>();
@@ -54,6 +54,11 @@ const cartSlice = createSlice({
       } else {
         cartAdapter.addOne(state, action.payload);
       }
+    },
+    updateItemQuantity(state, action: UpdateQuantityPayload) {
+      const { id, quantity } = action.payload;
+
+      cartAdapter.updateOne(state, { id, changes: { quantity } });
     },
     removeItemFromCart(state, action: PayloadAction<number>) {
       cartAdapter.removeOne(state, action.payload);
@@ -100,6 +105,11 @@ export const calcCartTotal = createSelector(selectAllCartItems, (cartItems) =>
   cartItems.reduce((total, item) => total + item.price * item.quantity, 0)
 );
 
-export const { addItemToCart, removeItemFromCart, clearCart } = actions;
+export const {
+  addItemToCart,
+  updateItemQuantity,
+  removeItemFromCart,
+  clearCart,
+} = actions;
 
 export default reducer;
