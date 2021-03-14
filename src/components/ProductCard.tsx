@@ -5,6 +5,7 @@ import {
   CardActions,
   CardContent,
   Typography,
+  Divider,
 } from "@material-ui/core";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { useSnackbar } from "notistack";
@@ -25,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
   },
   cardContent: {
     flexGrow: 1,
+  },
+  divider: {
+    margin: theme.spacing(2),
   },
 }));
 
@@ -55,10 +59,11 @@ const ProductCard: React.FC<Props> = ({ product }) => {
         <Typography gutterBottom variant="h5" component="h2">
           {product.name}
         </Typography>
-        <Typography variant="body1">
+        <Typography variant="h5">Цена: {product.price} р.</Typography>
+        <Divider className={classes.divider} variant="middle" />
+        <Typography color="textSecondary" variant="body1">
           {truncDescription(product.description, 70)}
         </Typography>
-        <Typography variant="h5">Цена: {product.price}</Typography>
       </CardContent>
       <CardActions className={classes.cardActions}>
         <GreenButton

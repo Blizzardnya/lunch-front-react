@@ -83,9 +83,9 @@ const CartPage: React.FC = () => {
             <TableHead>
               <TableRow>
                 <TableCell>Наименование</TableCell>
-                <TableCell align="right">Цена</TableCell>
-                <TableCell align="right">Количество</TableCell>
-                <TableCell align="right">Сумма</TableCell>
+                <TableCell align="right">Цена, р.</TableCell>
+                <TableCell align="right">Количество, шт.</TableCell>
+                <TableCell align="right">Сумма, р.</TableCell>
                 <TableCell align="right">
                   <Button
                     variant="outlined"
