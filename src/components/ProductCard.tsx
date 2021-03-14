@@ -7,6 +7,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import { useSnackbar } from "notistack";
 
 import GreenButton from "./Buttons/GreenButton";
 import { Product } from "../types/productTypes";
@@ -34,6 +35,7 @@ interface Props {
 const ProductCard: React.FC<Props> = ({ product }) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   const truncDescription = (text: string, length: number) => {
     const clamp = "...";
@@ -42,6 +44,9 @@ const ProductCard: React.FC<Props> = ({ product }) => {
 
   const addItemToCartF = (p: Product) => {
     dispatch(addItemToCart({ id: p.id, price: p.price, quantity: 1 }));
+    enqueueSnackbar("Товар добавлен в корзину.", {
+      variant: "success",
+    });
   };
 
   return (
