@@ -19,7 +19,7 @@ export const login = createAsyncThunk<
   { state: RootState; rejectValue: any }
 >("account/login", async (payload, _thunkAPI) => {
   const response = await axios.post(
-    "auth/token/create/",
+    "auth/token/login/",
     qs.stringify({
       username: payload.username,
       password: payload.password,
@@ -35,7 +35,7 @@ export const logout = createAsyncThunk<
   void,
   { state: RootState; rejectValue: any }
 >("account/logout", async (_payload, { getState }) => {
-  const response = await axios.post("auth/token/destroy", null, {
+  const response = await axios.post("auth/token/logout", null, {
     headers: { Authorization: "Token " + getState().account.token },
   });
 
