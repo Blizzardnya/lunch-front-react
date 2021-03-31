@@ -54,9 +54,11 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     title: {
       flexGrow: 1,
+      color: "#fff",
     },
     menuButton: {
       marginRight: 36,
+      color: "#fff",
     },
     hide: {
       display: "none",
@@ -91,6 +93,9 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0, 1),
       // necessary for content to be below app bar
       ...theme.mixins.toolbar,
+    },
+    white_button: {
+      color: "#fff",
     },
   })
 );
@@ -163,6 +168,7 @@ export default function MiniDrawer() {
             {title}
           </Typography>
           <IconButton
+            className={classes.white_button}
             color="inherit"
             onClick={() => history.push("/cart", { title: "Корзина" })}
           >
@@ -171,11 +177,19 @@ export default function MiniDrawer() {
             </Badge>
           </IconButton>
           {!loggedIn ? (
-            <Button color="inherit" onClick={() => history.push("/login")}>
+            <Button
+              className={classes.white_button}
+              color="inherit"
+              onClick={() => history.push("/login")}
+            >
               Войти
             </Button>
           ) : (
-            <Button color="inherit" onClick={() => dispatch(logout())}>
+            <Button
+              className={classes.white_button}
+              color="inherit"
+              onClick={() => dispatch(logout())}
+            >
               Выйти
             </Button>
           )}
