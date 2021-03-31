@@ -9,6 +9,7 @@ import {
   Paper,
   makeStyles,
   Container,
+  TablePagination,
 } from "@material-ui/core";
 
 import OrderRow from "../components/OrderRow";
@@ -32,6 +33,20 @@ const AccountPage: React.FC = () => {
   const orders = useAppSelector((state) => state.orders.orders);
   const ordersLoading = useAppSelector((state) => state.orders.isLoading);
 
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
   useEffect(() => {
     dispatch(fetchOrders());
   }, [dispatch]);
@@ -52,12 +67,23 @@ const AccountPage: React.FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orders.map((item) => (
-                <OrderRow key={item.created} item={item} />
-              ))}
+              {orders
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((item) => (
+                  <OrderRow key={item.created} item={item} />
+                ))}
             </TableBody>
           </Table>
         </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 20]}
+          component="div"
+          count={orders.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
       </Container>
     </>
   );
