@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles, Container, Grid } from "@material-ui/core";
+import SearchBar from "material-ui-search-bar";
 
 import ProductCard from "../components/ProductCard";
 import CategoriesList from "../components/CategoriesList";
 import Loading from "../components/Loading";
-import SearchBar from "../components/SearchBar";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import {
   fetchProducts,
@@ -49,7 +49,6 @@ const ShopPage: React.FC = () => {
         <Grid container spacing={3}>
           <Grid item xs={12} sm={8} md={9} lg={10}>
             <SearchBar
-              // @ts-ignore
               placeholder="Поиск"
               value={searchTerm}
               onChange={(value: string) => setSearchTerm(value.toLowerCase())}
