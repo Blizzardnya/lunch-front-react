@@ -49,6 +49,7 @@ const CartPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
+  const loggedIn = useAppSelector((state) => state.account.loggedIn);
   const cartItems = useAppSelector((state) => selectProductsInCart(state));
   const cartTotal = useAppSelector((state) => calcCartTotal(state));
   const isOrderSending = useAppSelector((state) => state.cart.isLoading);
@@ -141,13 +142,14 @@ const CartPage: React.FC = () => {
         </TableContainer>
         <div className={classes.paper}>
           <GreenButton
+            disabled={!loggedIn}
             className={classes.confirmButton}
             onClick={() =>
               dispatch(sendOrder({ showMessage: showSuccessMessage }))
             }
             size="large"
           >
-            Оформить заказ
+            {loggedIn ? "Оформить заказ" : "Войдите в аккаунт"}
           </GreenButton>
         </div>
       </Container>

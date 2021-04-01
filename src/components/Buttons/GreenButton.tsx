@@ -1,5 +1,5 @@
 import { Button, Theme, withStyles } from "@material-ui/core";
-import { green } from "@material-ui/core/colors";
+import { green, grey } from "@material-ui/core/colors";
 
 const GreenButton = withStyles((theme: Theme) => ({
   root: {
@@ -7,6 +7,10 @@ const GreenButton = withStyles((theme: Theme) => ({
     backgroundColor: green[600],
     "&:hover": {
       backgroundColor: green[800],
+    },
+    "&:disabled": {
+      color: theme.palette.getContrastText(grey[400]),
+      backgroundColor: grey[400],
     },
   },
 }))(Button);
