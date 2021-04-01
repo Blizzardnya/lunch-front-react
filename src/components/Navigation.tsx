@@ -195,6 +195,7 @@ export default function MiniDrawer() {
           )}
         </Toolbar>
       </AppBar>
+      <Toolbar id="back-to-top-anchor" />
       <Drawer
         variant="permanent"
         className={clsx(classes.drawer, {
