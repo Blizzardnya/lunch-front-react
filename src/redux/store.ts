@@ -11,6 +11,7 @@ import productsReducer from "./slices/productsSlice";
 import categoriesReducer from "./slices/categoriesSlice";
 import cartReducer from "./slices/cartSlice";
 import ordersReducer from "./slices/ordersSlice";
+import encryptor from "./encryptor";
 
 const rootReducer = combineReducers({
   account: accountReducer,
@@ -27,6 +28,7 @@ const persistConfig = {
   whitelist: ["account", "products", "categories", "cart", "orders"],
   // Blacklist (Don't Save Specific Reducers)
   blacklist: [],
+  transforms: [encryptor],
 };
 
 // Middleware: Redux Persist Persisted Reducer
@@ -42,7 +44,7 @@ const store = configureStore({
 });
 
 // Middleware: Redux Persist Persister
-let persistor = persistStore(store);
+const persistor = persistStore(store);
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof rootReducer>;
