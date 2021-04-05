@@ -9,12 +9,14 @@ import {
   IconButton,
   Box,
   Collapse,
+  Chip,
 } from "@material-ui/core";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-import dayjs from "dayjs";
+import { green, blue, yellow } from "@material-ui/core/colors";
 
-import { Order } from "../types/ordersTypes";
+import { Order, OrderStatus } from "../types/ordersTypes";
+import { normalizeOrderStatus, normalizeDate } from "../utils/normalizers";
 
 interface Props {
   item: Order;
@@ -33,21 +35,26 @@ const Row: React.FC<Props> = (props) => {
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
 
-  function normalizeStatus(status: string) {
+  function setChipColor(status: OrderStatus) {
     switch (status) {
-      case "N":
-        return "Новый";
-      case "P":
-        return "В процессе";
-      case "C":
-        return "Выполнен";
+      case OrderStatus.N:
+        return {
+          color: "#fff",
+          backgroundColor: blue[600],
+        };
+      case OrderStatus.P:
+        return {
+          color: "#636363",
+          backgroundColor: yellow[600],
+        };
+      case OrderStatus.C:
+        return {
+          color: "#fff",
+          backgroundColor: green[600],
+        };
       default:
-        return "Неизвестный статус";
+        return {};
     }
-  }
-
-  function normalizeDate(date: string) {
-    return dayjs(date).format("DD-MM-YYYY HH:mm:ss");
   }
 
   return (
@@ -67,7 +74,12 @@ const Row: React.FC<Props> = (props) => {
         </TableCell>
         <TableCell align="right">{normalizeDate(item.created)}</TableCell>
         <TableCell align="right">{item.get_total_cost}</TableCell>
-        <TableCell align="right">{normalizeStatus(item.status)}</TableCell>
+        <TableCell align="right">
+          <Chip
+            label={normalizeOrderStatus(item.status)}
+            style={setChipColor(item.status)}
+          />
+        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
