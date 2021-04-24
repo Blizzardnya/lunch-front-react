@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Avatar,
   Button,
@@ -9,6 +9,8 @@ import {
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { makeStyles } from "@material-ui/core/styles";
+import { useFormik } from "formik";
+import * as yup from "yup";
 
 import { useAppDispatch } from "../redux/hooks";
 import { login } from "../redux/slices/accountSlice";
@@ -34,16 +36,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const validationSchema = yup.object({
+  username: yup.string().required("Username is required"),
+  password: yup.string().required("Password is required"),
+});
+
 const LoginPage: React.FC = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const classes = useStyles();
   const dispatch = useAppDispatch();
 
-  const submitForm = (event: React.FormEvent) => {
-    event.preventDefault();
-    dispatch(login({ username, password }));
-  };
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      password: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      const { username, password } = values;
+      dispatch(login({ username, password }));
+    },
+  });
 
   return (
     <Container component="main" maxWidth="sm">
@@ -55,30 +67,34 @@ const LoginPage: React.FC = () => {
         <Typography component="h1" variant="h5">
           Авторизация
         </Typography>
-        <form className={classes.form} onSubmit={submitForm}>
+        <form className={classes.form} onSubmit={formik.handleSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
-            required
             fullWidth
-            id="login"
+            id="username"
             label="Логин"
-            name="login"
-            autoComplete="login"
+            name="username"
+            autoComplete="username"
             autoFocus
-            onChange={(event) => setUsername(event.target.value)}
+            value={formik.values.username}
+            onChange={formik.handleChange}
+            error={formik.touched.username && Boolean(formik.errors.username)}
+            helperText={formik.touched.username && formik.errors.username}
           />
           <TextField
             variant="outlined"
             margin="normal"
-            required
             fullWidth
             name="password"
             label="Пароль"
             type="password"
             id="password"
             autoComplete="current-password"
-            onChange={(event) => setPassword(event.target.value)}
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
           />
           <Button
             type="submit"
