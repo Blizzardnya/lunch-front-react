@@ -4,10 +4,10 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import { ThemeProvider, createTheme } from "@material-ui/core/styles";
 import { ruRU } from "@material-ui/core/locale";
 
-const theme = createMuiTheme(
+const theme = createTheme(
   {
     palette: {
       primary: { main: "#00B294" },
