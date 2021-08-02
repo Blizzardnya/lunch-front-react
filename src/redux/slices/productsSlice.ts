@@ -86,6 +86,22 @@ export const selectProductsByCategory = createSelector(
   }
 );
 
+export const selectProductsByCategoryAndName = createSelector(
+  selectProductsByCategory,
+  (_: any, _c: number | null, name: string) => name,
+  (products, name) => {
+    const processedName = name.trim().toLowerCase();
+
+    if (processedName.length === 0) {
+      return products;
+    } else {
+      return products.filter((item) =>
+        item.name.toLocaleLowerCase().includes(processedName)
+      );
+    }
+  }
+);
+
 const { reducer } = productsSlice;
 
 export default reducer;

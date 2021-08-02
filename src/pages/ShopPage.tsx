@@ -8,10 +8,9 @@ import Loading from "../components/Loading";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import {
   fetchProducts,
-  selectProductsByCategory,
+  selectProductsByCategoryAndName,
 } from "../redux/slices/productsSlice";
 import { selectAllCategories } from "../redux/slices/categoriesSlice";
-import { Product } from "../types/productTypes";
 
 const useStyles = makeStyles((theme) => ({
   cardGrid: {
@@ -27,7 +26,7 @@ const ShopPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentCategory, setCurrentCategory] = useState<number | null>(null);
   const products = useAppSelector((state) =>
-    selectProductsByCategory(state, currentCategory)
+    selectProductsByCategoryAndName(state, currentCategory, searchTerm)
   );
   const categories = useAppSelector((state) => selectAllCategories(state));
   const productsLoading = useAppSelector((state) => state.products.isLoading);
@@ -58,7 +57,7 @@ const ShopPage: React.FC = () => {
               }}
             />
             <Grid container spacing={4}>
-              {filterProducts().map((product) => (
+              {products.map((product) => (
                 <Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
                   <ProductCard product={product} />
                 </Grid>
