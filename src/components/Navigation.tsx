@@ -100,6 +100,21 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+function getAppBarTitle(pathname: string) {
+  switch (pathname) {
+    case "/":
+      return "Магазин";
+    case "/cart":
+      return "Корзина";
+    case "/account":
+      return "Аккаунт";
+    case "/login":
+      return "Авторизация";
+    default:
+      return "";
+  }
+}
+
 export default function MiniDrawer() {
   const classes = useStyles();
   const theme = useTheme();
@@ -119,24 +134,11 @@ export default function MiniDrawer() {
     setOpen(false);
   };
 
-  function getAppBarTitle(pathname: string) {
-    switch (pathname) {
-      case "/":
-        return "Магазин";
-      case "/cart":
-        return "Корзина";
-      case "/account":
-        return "Аккаунт";
-      case "/login":
-        return "Авторизация";
-      default:
-        return "";
-    }
-  }
-
   useEffect(() => {
     const unlisten = history.listen((location) => {
-      setTitle(getAppBarTitle(location.pathname));
+      const title = getAppBarTitle(location.pathname);
+      setTitle(title);
+      document.title = title;
     });
     return () => {
       unlisten();
