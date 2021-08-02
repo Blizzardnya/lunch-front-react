@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { makeStyles, Container, Grid } from "@material-ui/core";
+import Pagination from "@material-ui/lab/Pagination";
 import SearchBar from "material-ui-search-bar";
+import { useHistory } from "react-router";
 
 import ProductCard from "../components/ProductCard";
 import CategoriesList from "../components/CategoriesList";
@@ -11,6 +13,7 @@ import {
   selectProductsByCategoryAndName,
 } from "../redux/slices/productsSlice";
 import { selectAllCategories } from "../redux/slices/categoriesSlice";
+import { useQuery } from "../hooks";
 
 const useStyles = makeStyles((theme) => ({
   cardGrid: {
@@ -19,9 +22,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const rowsPerPage = 8;
+
 const ShopPage: React.FC = () => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
+
+  const history = useHistory();
+  const query = useQuery();
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentCategory, setCurrentCategory] = useState<number | null>(null);
@@ -31,15 +39,28 @@ const ShopPage: React.FC = () => {
   const categories = useAppSelector((state) => selectAllCategories(state));
   const productsLoading = useAppSelector((state) => state.products.isLoading);
 
+  const page = Number(query.get("page")) || 1;
+  const pageCount = useMemo(
+    () => Math.ceil(products.length / rowsPerPage),
+    [products.length]
+  );
+
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
-  const filterProducts = (): Product[] => {
-    return searchTerm
-      ? products.filter((item) => item.name.toLowerCase().includes(searchTerm))
-      : products;
-  };
+  useEffect(() => {
+    if (page > pageCount)
+      history.replace({ pathname: "/", search: `?page=${1}` });
+  }, [history, page, pageCount]);
+
+  const setSearch = (value: string) => setSearchTerm(value.toLowerCase());
+  const clearSearch = () => setSearchTerm("");
+
+  const setCategory = (id: number | null) => setCurrentCategory(id);
+
+  const setCurrentPage = (_: React.ChangeEvent<unknown>, page: number) =>
+    history.replace({ pathname: "/", search: `?page=${page}` });
 
   return (
     <>
@@ -50,24 +71,43 @@ const ShopPage: React.FC = () => {
             <SearchBar
               placeholder="Поиск"
               value={searchTerm}
-              onChange={(value: string) => setSearchTerm(value.toLowerCase())}
-              onCancelSearch={() => setSearchTerm("")}
+              onChange={setSearch}
+              onCancelSearch={clearSearch}
               style={{
                 marginBottom: 10,
               }}
             />
             <Grid container spacing={4}>
-              {products.map((product) => (
-                <Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
-                  <ProductCard product={product} />
-                </Grid>
-              ))}
+              {products
+                .slice(
+                  (page - 1) * rowsPerPage,
+                  (page - 1) * rowsPerPage + rowsPerPage
+                )
+                .map((product) => (
+                  <Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
+                    <ProductCard product={product} />
+                  </Grid>
+                ))}
             </Grid>
           </Grid>
           <Grid item xs={12} sm={4} md={3} lg={2}>
             <CategoriesList
               categories={categories}
-              onCategoryPress={(id) => setCurrentCategory(id)}
+              onCategoryPress={setCategory}
+            />
+          </Grid>
+          <Grid
+            xs={12}
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Pagination
+              page={page}
+              count={pageCount}
+              color="primary"
+              onChange={setCurrentPage}
             />
           </Grid>
         </Grid>
