@@ -94,7 +94,6 @@ const ShopPage: React.FC = () => {
                 ))}
             </Grid>
             <Grid
-              xs={12}
               container
               direction="row"
               justifyContent="center"
