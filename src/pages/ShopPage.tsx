@@ -20,6 +20,12 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
   },
+  searchBar: {
+    marginBottom: theme.spacing(2),
+  },
+  pagination: {
+    marginTop: theme.spacing(2),
+  },
 }));
 
 const rowsPerPage = 8;
@@ -73,9 +79,7 @@ const ShopPage: React.FC = () => {
               value={searchTerm}
               onChange={setSearch}
               onCancelSearch={clearSearch}
-              style={{
-                marginBottom: 10,
-              }}
+              className={classes.searchBar}
             />
             <Grid container spacing={4}>
               {products
@@ -89,25 +93,26 @@ const ShopPage: React.FC = () => {
                   </Grid>
                 ))}
             </Grid>
+            <Grid
+              xs={12}
+              container
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              className={classes.pagination}
+            >
+              <Pagination
+                page={page}
+                count={pageCount}
+                color="primary"
+                onChange={setCurrentPage}
+              />
+            </Grid>
           </Grid>
           <Grid item xs={12} sm={4} md={3} lg={2}>
             <CategoriesList
               categories={categories}
               onCategoryPress={setCategory}
-            />
-          </Grid>
-          <Grid
-            xs={12}
-            container
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Pagination
-              page={page}
-              count={pageCount}
-              color="primary"
-              onChange={setCurrentPage}
             />
           </Grid>
         </Grid>
