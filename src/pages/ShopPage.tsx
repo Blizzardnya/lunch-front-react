@@ -56,8 +56,7 @@ const ShopPage: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (page > pageCount)
-      history.replace({ pathname: "/", search: `?page=${1}` });
+    if (page > pageCount) history.push({ pathname: "/", search: `?page=${1}` });
   }, [history, page, pageCount]);
 
   const setSearch = (value: string) => setSearchTerm(value.toLowerCase());
@@ -66,7 +65,7 @@ const ShopPage: React.FC = () => {
   const setCategory = (id: number | null) => setCurrentCategory(id);
 
   const setCurrentPage = (_: React.ChangeEvent<unknown>, page: number) =>
-    history.replace({ pathname: "/", search: `?page=${page}` });
+    history.push({ pathname: "/", search: `?page=${page}` });
 
   return (
     <>
