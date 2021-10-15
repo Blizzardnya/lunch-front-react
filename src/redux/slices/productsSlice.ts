@@ -11,6 +11,10 @@ import { Category } from "../../types/categoriesTypes";
 import { RootState } from "../store";
 import axios from "../../core/axios";
 
+interface ProductsResponseType {
+  data: { products: Product[] };
+}
+
 // Define normalizr entity schemas
 const categoryEntity = new schema.Entity("categories");
 const productEntity = new schema.Entity(
@@ -34,7 +38,9 @@ const productsInitialState = productsAdapter.getInitialState({
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
   async (_, _thunkAPI) => {
-    const response = await axios.get("api/v1/cafe/product");
+    const response = await axios.get<ProductsResponseType>(
+      "api/v1/cafe/product"
+    );
     const normalized = normalize<
       any,
       {

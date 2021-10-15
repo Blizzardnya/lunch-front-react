@@ -4,6 +4,10 @@ import { Order, OrdersInitialState } from "../../types/ordersTypes";
 import { RootState } from "../store";
 import axios from "../../core/axios";
 
+interface OrdersResponseType {
+  data: { orders: Order[] };
+}
+
 const initialState: OrdersInitialState = {
   orders: [],
   isLoading: false,
@@ -15,7 +19,7 @@ export const fetchOrders = createAsyncThunk<
   { state: RootState; rejectValue: any }
 >("orders/fetchOrders", async (_, { getState }) => {
   const { token, username } = getState().account;
-  const response = await axios.get("api/v1/orders/order", {
+  const response = await axios.get<OrdersResponseType>("api/v1/orders/order", {
     headers: { Authorization: "Token " + token },
     params: { username },
   });

@@ -4,7 +4,7 @@ import "fontsource-roboto";
 import { PersistGate } from "redux-persist/es/integration/react";
 import { Provider } from "react-redux";
 import { SnackbarProvider } from "notistack";
-import { createStyles, makeStyles, Theme, Fab } from "@material-ui/core";
+import { Fab } from "@material-ui/core";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 
 import ShopPage from "./pages/ShopPage";
@@ -16,31 +16,17 @@ import { persistor, store } from "./redux/store";
 import history from "./core/history";
 import ScrollTop from "./components/ScrollToTop";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: "flex",
-    },
-    content: {
-      flexGrow: 1,
-      padding: theme.spacing(3),
-    },
-  })
-);
-
 function App() {
-  const classes = useStyles();
-
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <Router history={history}>
           <SnackbarProvider maxSnack={3}>
-            <div className={classes.root}>
+            <div style={{ display: "flex" }}>
               <nav>
                 <Navigation />
               </nav>
-              <main className={classes.content}>
+              <main style={{ flexGrow: 1, padding: 24 }}>
                 <Switch>
                   <Route path="/" component={ShopPage} exact />
                   <Route path="/cart" component={CartPage} />

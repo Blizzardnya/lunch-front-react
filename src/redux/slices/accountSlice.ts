@@ -13,12 +13,16 @@ const initialState: AccountState = {
   username: null,
 };
 
+interface LoginResponseType {
+  data: { id: string };
+}
+
 export const login = createAsyncThunk<
   { token: string; username: string },
   AuthPayload,
   { state: RootState; rejectValue: any }
 >("account/login", async (payload, _thunkAPI) => {
-  const response = await axios.post(
+  const response = await axios.post<LoginResponseType>(
     "auth/token/login/",
     qs.stringify({
       username: payload.username,
@@ -35,7 +39,7 @@ export const logout = createAsyncThunk<
   void,
   { state: RootState; rejectValue: any }
 >("account/logout", async (_payload, { getState }) => {
-  const response = await axios.post("auth/token/logout", null, {
+  const response = await axios.post<any>("auth/token/logout", null, {
     headers: { Authorization: "Token " + getState().account.token },
   });
 
