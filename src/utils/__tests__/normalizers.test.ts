@@ -11,6 +11,5 @@ test("Normalize order status", () => {
   expect(normalizeOrderStatus(OrderStatus.C)).toBe("Выполнен");
   expect(normalizeOrderStatus(OrderStatus.N)).toBe("Новый");
   expect(normalizeOrderStatus(OrderStatus.P)).toBe("В процессе");
-  //@ts-ignore
-  expect(normalizeOrderStatus("U")).toBe("Неизвестный статус");
+  expect(normalizeOrderStatus("U" as OrderStatus)).toBe("Неизвестный статус");
 });
