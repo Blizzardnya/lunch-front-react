@@ -3,6 +3,7 @@ import { makeStyles, Container, Grid } from "@material-ui/core";
 import Pagination from "@material-ui/lab/Pagination";
 import SearchBar from "material-ui-search-bar";
 import { useHistory } from "react-router";
+import debounce from "lodash/debounce";
 
 import ProductCard from "../components/ProductCard";
 import CategoriesList from "../components/CategoriesList";
@@ -59,7 +60,10 @@ const ShopPage: React.FC = () => {
     if (page > pageCount) history.push({ pathname: "/", search: `?page=${1}` });
   }, [history, page, pageCount]);
 
-  const setSearch = (value: string) => setSearchTerm(value.toLowerCase());
+  const setSearch = debounce(
+    (value: string) => setSearchTerm(value.toLowerCase()),
+    1000
+  );
   const clearSearch = () => setSearchTerm("");
 
   const setCategory = (id: number | null) => setCurrentCategory(id);
