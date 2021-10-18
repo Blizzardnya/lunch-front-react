@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import qs from "qs";
+import ax from "axios";
 
 import { AccountState, AuthPayload } from "../../types/accountTypes";
 import { RootState } from "../store";
@@ -38,13 +39,18 @@ export const logout = createAsyncThunk<
   void,
   void,
   { state: RootState; rejectValue: any }
->("account/logout", async (_payload, { getState }) => {
-  const response = await axios.post<any>("auth/token/logout", null, {
-    headers: { Authorization: "Token " + getState().account.token },
-  });
-
-  history.push("/");
-  return response.data;
+>("account/logout", async (_payload, { getState, rejectWithValue }) => {
+  try {
+    const response = await axios.post<any>("auth/token/logout", null, {
+      headers: { Authorization: "Token " + getState().account.token },
+    });
+    history.push("/");
+    return response.data;
+  } catch (e: any) {
+    if (ax.isAxiosError(e)) {
+      if (e.response?.status !== 401) rejectWithValue(e.response?.data);
+    }
+  }
 });
 
 const accountSlice = createSlice({
