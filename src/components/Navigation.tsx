@@ -27,11 +27,12 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import StoreIcon from "@material-ui/icons/LocalMall";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
-import { useHistory } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
 import { selectTotalCartItems } from "../redux/slices/cartSlice";
 import { logout } from "../redux/slices/accountSlice";
+import { getAppBarTitle } from "../utils/placeholders";
 
 const drawerWidth = 240;
 
@@ -100,25 +101,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-function getAppBarTitle(pathname: string) {
-  switch (pathname) {
-    case "/":
-      return "Магазин";
-    case "/cart":
-      return "Корзина";
-    case "/account":
-      return "Аккаунт";
-    case "/login":
-      return "Авторизация";
-    default:
-      return "";
-  }
-}
-
 export default function MiniDrawer() {
   const classes = useStyles();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useAppDispatch();
 
   const [open, setOpen] = React.useState(false);
@@ -135,15 +122,10 @@ export default function MiniDrawer() {
   };
 
   useEffect(() => {
-    const unlisten = history.listen((location) => {
-      const title = getAppBarTitle(location.pathname);
-      setTitle(title);
-      document.title = title;
-    });
-    return () => {
-      unlisten();
-    };
-  });
+    const title = getAppBarTitle(location.pathname);
+    setTitle(title);
+    document.title = title;
+  }, [location]);
 
   return (
     <>
@@ -172,7 +154,7 @@ export default function MiniDrawer() {
           <IconButton
             className={classes.white_button}
             color="inherit"
-            onClick={() => history.push("/cart", { title: "Корзина" })}
+            onClick={() => navigate("/cart")}
           >
             <Badge badgeContent={cartItemsCount} color="secondary">
               <ShoppingCartIcon />
@@ -182,7 +164,7 @@ export default function MiniDrawer() {
             <Button
               className={classes.white_button}
               color="inherit"
-              onClick={() => history.push("/login")}
+              onClick={() => navigate("/login")}
             >
               Войти
             </Button>
@@ -222,20 +204,20 @@ export default function MiniDrawer() {
         </div>
         <Divider />
         <List>
-          <ListItem button onClick={() => history.push("/")}>
+          <ListItem button onClick={() => navigate("/")}>
             <ListItemIcon>
               <StoreIcon />
             </ListItemIcon>
             <ListItemText primary="Товары" />
           </ListItem>
-          <ListItem button onClick={() => history.push("/cart")}>
+          <ListItem button onClick={() => navigate("/cart")}>
             <ListItemIcon>
               <ShoppingCartIcon />
             </ListItemIcon>
             <ListItemText primary="Корзина" />
           </ListItem>
           {loggedIn ? (
-            <ListItem button onClick={() => history.push("/account")}>
+            <ListItem button onClick={() => navigate("/account")}>
               <ListItemIcon>
                 <AccountBoxIcon />
               </ListItemIcon>

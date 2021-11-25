@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { makeStyles, Container, Grid } from "@material-ui/core";
 import Pagination from "@material-ui/lab/Pagination";
 import SearchBar from "material-ui-search-bar";
-import { useHistory } from "react-router";
+import { useSearchParams } from "react-router-dom";
 import debounce from "lodash/debounce";
 
 import ProductCard from "../components/ProductCard";
@@ -14,7 +14,6 @@ import {
   selectProductsByCategoryAndName,
 } from "../redux/slices/productsSlice";
 import { selectAllCategories } from "../redux/slices/categoriesSlice";
-import { useQuery } from "../hooks";
 
 const useStyles = makeStyles((theme) => ({
   cardGrid: {
@@ -35,8 +34,7 @@ const ShopPage: React.FC = () => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
 
-  const history = useHistory();
-  const query = useQuery();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentCategory, setCurrentCategory] = useState<number | null>(null);
@@ -46,7 +44,7 @@ const ShopPage: React.FC = () => {
   const categories = useAppSelector((state) => selectAllCategories(state));
   const productsLoading = useAppSelector((state) => state.products.isLoading);
 
-  const page = Number(query.get("page")) || 1;
+  const page = Number(searchParams.get("page")) || 1;
   const pageCount = useMemo(
     () => Math.ceil(products.length / rowsPerPage),
     [products.length]
@@ -57,8 +55,8 @@ const ShopPage: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (page > pageCount) history.push({ pathname: "/", search: `?page=${1}` });
-  }, [history, page, pageCount]);
+    if (page > pageCount) setSearchParams({ page: "1" });
+  }, [setSearchParams, page, pageCount]);
 
   const setSearch = debounce(
     (value: string) => setSearchTerm(value.toLowerCase()),
@@ -69,7 +67,7 @@ const ShopPage: React.FC = () => {
   const setCategory = (id: number | null) => setCurrentCategory(id);
 
   const setCurrentPage = (_: React.ChangeEvent<unknown>, page: number) =>
-    history.push({ pathname: "/", search: `?page=${page}` });
+    setSearchParams({ page: page.toString() });
 
   return (
     <>

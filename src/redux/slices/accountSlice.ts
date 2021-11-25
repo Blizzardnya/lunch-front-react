@@ -5,7 +5,6 @@ import ax from "axios";
 import { AccountState, AuthPayload } from "../../types/accountTypes";
 import { RootState } from "../store";
 import axios from "../../core/axios";
-import history from "../../core/history";
 
 const initialState: AccountState = {
   loggedIn: false,
@@ -31,7 +30,6 @@ export const login = createAsyncThunk<
     })
   );
 
-  history.push("/");
   return { token: response.data.data.id, username: payload.username };
 });
 
@@ -44,7 +42,6 @@ export const logout = createAsyncThunk<
     const response = await axios.post<any>("auth/token/logout", null, {
       headers: { Authorization: "Token " + getState().account.token },
     });
-    history.push("/");
     return response.data;
   } catch (e: any) {
     if (ax.isAxiosError(e)) {

@@ -8,7 +8,6 @@ import {
 
 import { RootState } from "../store";
 import axios from "../../core/axios";
-import history from "../../core/history";
 import { CartItem, UpdateQuantityPayload } from "../../types/cartTypes";
 import { selectProductEntities } from "./productsSlice";
 
@@ -37,7 +36,6 @@ export const sendOrder = createAsyncThunk<
   if (response.status === 201) {
     payload.showMessage();
     dispatch(clearCart());
-    history.push("/account");
   }
 });
 
