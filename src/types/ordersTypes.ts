@@ -1,9 +1,9 @@
 import { Product } from "./productTypes";
 
 export enum OrderStatus {
-  N = "N",
-  P = "P",
-  C = "C",
+  NEW = "N",
+  PROCESSED = "P",
+  COMPLETE = "C",
 }
 
 interface OrderItem {

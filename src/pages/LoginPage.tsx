@@ -37,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const validationSchema = yup.object({
-  username: yup.string().required("Username is required"),
-  password: yup.string().required("Password is required"),
+  username: yup.string().required("Введите логин"),
+  password: yup.string().required("Введите пароль"),
 });
 
 const LoginPage: React.FC = () => {

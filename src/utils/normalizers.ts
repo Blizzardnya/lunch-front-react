@@ -4,11 +4,11 @@ import { OrderStatus } from "../types/ordersTypes";
 
 function normalizeOrderStatus(status: OrderStatus) {
   switch (status) {
-    case OrderStatus.N:
+    case OrderStatus.NEW:
       return "Новый";
-    case OrderStatus.P:
+    case OrderStatus.PROCESSED:
       return "В процессе";
-    case OrderStatus.C:
+    case OrderStatus.COMPLETE:
       return "Выполнен";
     default:
       return "Неизвестный статус";

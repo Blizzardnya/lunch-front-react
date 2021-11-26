@@ -33,7 +33,7 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.60",
     "@reduxjs/toolkit": "^1.6.2",
-    "axios": "^0.23.0",
+    "axios": "^0.24.0",
     "crypto-js": "^4.1.1",
     "dayjs": "^1.10.7",
     "express": "^4.17.1",

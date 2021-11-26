@@ -30,32 +30,34 @@ const useRowStyles = makeStyles({
   },
 });
 
+function setChipColor(status: OrderStatus) {
+  switch (status) {
+    case OrderStatus.NEW:
+      return {
+        color: "#fff",
+        backgroundColor: blue[600],
+      };
+    case OrderStatus.PROCESSED:
+      return {
+        color: "#636363",
+        backgroundColor: yellow[600],
+      };
+    case OrderStatus.COMPLETE:
+      return {
+        color: "#fff",
+        backgroundColor: green[600],
+      };
+    default:
+      return {};
+  }
+}
+
 const Row: React.FC<Props> = (props) => {
   const { item } = props;
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
 
-  function setChipColor(status: OrderStatus) {
-    switch (status) {
-      case OrderStatus.N:
-        return {
-          color: "#fff",
-          backgroundColor: blue[600],
-        };
-      case OrderStatus.P:
-        return {
-          color: "#636363",
-          backgroundColor: yellow[600],
-        };
-      case OrderStatus.C:
-        return {
-          color: "#fff",
-          backgroundColor: green[600],
-        };
-      default:
-        return {};
-    }
-  }
+  const toggleRowExpand = () => setOpen((prevValue) => !prevValue);
 
   return (
     <React.Fragment>
@@ -64,7 +66,7 @@ const Row: React.FC<Props> = (props) => {
           <IconButton
             aria-label="expand row"
             size="small"
-            onClick={() => setOpen(!open)}
+            onClick={toggleRowExpand}
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>

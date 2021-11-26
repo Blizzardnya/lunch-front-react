@@ -14,6 +14,7 @@ import GreenButton from "./Buttons/GreenButton";
 import { Product } from "../types/productTypes";
 import { useAppDispatch } from "../redux/hooks";
 import { addItemToCart } from "../redux/slices/cartSlice";
+import { truncDescription } from "../utils/text";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -41,13 +42,10 @@ const ProductCard: React.FC<Props> = ({ product }) => {
   const dispatch = useAppDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
-  const truncDescription = (text: string, length: number) => {
-    const clamp = "...";
-    return text.length > length ? text.slice(0, length) + clamp : text;
-  };
+  const addItemToCartF = () => {
+    const { id, price } = product;
 
-  const addItemToCartF = (p: Product) => {
-    dispatch(addItemToCart({ id: p.id, price: p.price, quantity: 1 }));
+    dispatch(addItemToCart({ id, price, quantity: 1 }));
     enqueueSnackbar("Товар добавлен в корзину.", {
       variant: "success",
     });
@@ -70,7 +68,7 @@ const ProductCard: React.FC<Props> = ({ product }) => {
           variant="contained"
           color="primary"
           startIcon={<AddShoppingCartIcon />}
-          onClick={() => addItemToCartF(product)}
+          onClick={addItemToCartF}
         >
           Добавить
         </GreenButton>

@@ -8,8 +8,8 @@ test("Normalize date", () => {
 });
 
 test("Normalize order status", () => {
-  expect(normalizeOrderStatus(OrderStatus.C)).toBe("Выполнен");
-  expect(normalizeOrderStatus(OrderStatus.N)).toBe("Новый");
-  expect(normalizeOrderStatus(OrderStatus.P)).toBe("В процессе");
+  expect(normalizeOrderStatus(OrderStatus.COMPLETE)).toBe("Выполнен");
+  expect(normalizeOrderStatus(OrderStatus.NEW)).toBe("Новый");
+  expect(normalizeOrderStatus(OrderStatus.PROCESSED)).toBe("В процессе");
   expect(normalizeOrderStatus("U" as OrderStatus)).toBe("Неизвестный статус");
 });
