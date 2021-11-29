@@ -1,4 +1,5 @@
 import React, { ChangeEvent } from "react";
+import { styled } from "@mui/material/styles";
 import {
   TableContainer,
   Table,
@@ -7,11 +8,10 @@ import {
   TableCell,
   TableBody,
   Paper,
-  makeStyles,
   Container,
   Button,
   TextField,
-} from "@material-ui/core";
+} from "@mui/material";
 import { useSnackbar } from "notistack";
 
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
@@ -26,26 +26,38 @@ import {
 import GreenButton from "../components/Buttons/GreenButton";
 import Loading from "../components/Loading";
 
-const useStyles = makeStyles((theme) => ({
-  table: {
+const PREFIX = "CartPage";
+
+const classes = {
+  table: `${PREFIX}-table`,
+  container: `${PREFIX}-container`,
+  paper: `${PREFIX}-paper`,
+  confirmButton: `${PREFIX}-confirmButton`,
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled("div")(({ theme }) => ({
+  [`& .${classes.table}`]: {
     minWidth: 650,
   },
-  container: {
+
+  [`& .${classes.container}`]: {
     paddingTop: theme.spacing(8),
   },
-  paper: {
+
+  [`& .${classes.paper}`]: {
     display: "flex",
     marginTop: theme.spacing(1),
     justifyContent: "center",
   },
-  confirmButton: {
+
+  [`& .${classes.confirmButton}`]: {
     marginTop: 5,
     marginBottom: 5,
   },
 }));
 
 const CartPage: React.FC = () => {
-  const classes = useStyles();
   const dispatch = useAppDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -76,7 +88,7 @@ const CartPage: React.FC = () => {
   };
 
   return (
-    <>
+    <Root>
       <Loading isLoading={isOrderSending} />
       <Container className={classes.container} maxWidth="xl">
         <TableContainer component={Paper}>
@@ -90,7 +102,7 @@ const CartPage: React.FC = () => {
                 <TableCell align="right">
                   <Button
                     variant="outlined"
-                    color="secondary"
+                    color="error"
                     onClick={() => dispatch(clearCart())}
                   >
                     Очистить корзину
@@ -123,7 +135,7 @@ const CartPage: React.FC = () => {
                   <TableCell align="right">
                     <Button
                       variant="contained"
-                      color="secondary"
+                      color="error"
                       onClick={() => dispatch(removeItemFromCart(item.id))}
                     >
                       Удалить
@@ -153,7 +165,7 @@ const CartPage: React.FC = () => {
           </GreenButton>
         </div>
       </Container>
-    </>
+    </Root>
   );
 };
 

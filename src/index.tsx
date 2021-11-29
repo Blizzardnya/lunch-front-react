@@ -1,26 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import reportWebVitals from "./reportWebVitals";
 
 import "./index.css";
 import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-import { ThemeProvider, createTheme } from "@material-ui/core/styles";
-import { ruRU } from "@material-ui/core/locale";
-
-const theme = createTheme(
-  {
-    palette: {
-      primary: { main: "#00B294" },
-    },
-  },
-  ruRU
-);
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <App />
-    </ThemeProvider>
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 );

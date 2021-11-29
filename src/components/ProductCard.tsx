@@ -1,13 +1,13 @@
 import React from "react";
+import { styled } from "@mui/material/styles";
 import {
-  makeStyles,
   Card,
   CardActions,
   CardContent,
   Typography,
   Divider,
-} from "@material-ui/core";
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+} from "@mui/material";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { useSnackbar } from "notistack";
 
 import GreenButton from "./Buttons/GreenButton";
@@ -16,19 +16,31 @@ import { useAppDispatch } from "../redux/hooks";
 import { addItemToCart } from "../redux/slices/cartSlice";
 import { truncDescription } from "../utils/text";
 
-const useStyles = makeStyles((theme) => ({
-  card: {
+const PREFIX = "ProductCard";
+
+const classes = {
+  card: `${PREFIX}-card`,
+  cardActions: `${PREFIX}-cardActions`,
+  cardContent: `${PREFIX}-cardContent`,
+  divider: `${PREFIX}-divider`,
+};
+
+const StyledCard = styled(Card)(({ theme }) => ({
+  [`&.${classes.card}`]: {
     height: "100%",
     display: "flex",
     flexDirection: "column",
   },
-  cardActions: {
+
+  [`& .${classes.cardActions}`]: {
     justifyContent: "center",
   },
-  cardContent: {
+
+  [`& .${classes.cardContent}`]: {
     flexGrow: 1,
   },
-  divider: {
+
+  [`& .${classes.divider}`]: {
     margin: theme.spacing(2),
   },
 }));
@@ -38,7 +50,6 @@ interface Props {
 }
 
 const ProductCard: React.FC<Props> = ({ product }) => {
-  const classes = useStyles();
   const dispatch = useAppDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -52,7 +63,7 @@ const ProductCard: React.FC<Props> = ({ product }) => {
   };
 
   return (
-    <Card variant="outlined" className={classes.card}>
+    <StyledCard variant="outlined" className={classes.card}>
       <CardContent className={classes.cardContent}>
         <Typography gutterBottom variant="h5" component="h2">
           {product.name}
@@ -73,7 +84,7 @@ const ProductCard: React.FC<Props> = ({ product }) => {
           Добавить
         </GreenButton>
       </CardActions>
-    </Card>
+    </StyledCard>
   );
 };
 

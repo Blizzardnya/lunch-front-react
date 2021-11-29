@@ -1,16 +1,8 @@
 import React, { useEffect } from "react";
-import clsx from "clsx";
-import {
-  createStyles,
-  makeStyles,
-  useTheme,
-  Theme,
-} from "@material-ui/core/styles";
+import { styled } from "@mui/material/styles";
 import {
   Badge,
   Button,
-  Drawer,
-  AppBar,
   Toolbar,
   List,
   CssBaseline,
@@ -20,13 +12,14 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-} from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import StoreIcon from "@material-ui/icons/LocalMall";
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import AccountBoxIcon from "@material-ui/icons/AccountBox";
+} from "@mui/material";
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
+import MuiDrawer from "@mui/material/Drawer";
+import MenuIcon from "@mui/icons-material/Menu";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import StoreIcon from "@mui/icons-material/LocalMall";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import { useNavigate, useLocation } from "react-router";
 
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
@@ -36,74 +29,55 @@ import { getAppBarTitle } from "../utils/placeholders";
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    appBar: {
-      zIndex: theme.zIndex.drawer + 1,
-      transition: theme.transitions.create(["width", "margin"], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-    },
-    appBarShift: {
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-      transition: theme.transitions.create(["width", "margin"], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    },
-    title: {
-      flexGrow: 1,
-      color: "#fff",
-    },
-    menuButton: {
-      marginRight: 36,
-      color: "#fff",
-    },
-    hide: {
-      display: "none",
-    },
-    drawer: {
-      width: drawerWidth,
-      flexShrink: 0,
-      whiteSpace: "nowrap",
-    },
-    drawerOpen: {
-      width: drawerWidth,
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    },
-    drawerClose: {
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
+interface AppBarProps extends MuiAppBarProps {
+  open?: boolean;
+}
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== "open",
+})<AppBarProps>(({ theme, open }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(["width", "margin"], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}));
+
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  "& .MuiDrawer-paper": {
+    position: "relative",
+    whiteSpace: "nowrap",
+    width: drawerWidth,
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    boxSizing: "border-box",
+    ...(!open && {
       overflowX: "hidden",
-      width: theme.spacing(7) + 1,
+      transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      width: theme.spacing(7),
       [theme.breakpoints.up("sm")]: {
-        width: theme.spacing(9) + 1,
+        width: theme.spacing(9),
       },
-    },
-    toolbar: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "flex-end",
-      padding: theme.spacing(0, 1),
-      // necessary for content to be below app bar
-      ...theme.mixins.toolbar,
-    },
-    white_button: {
-      color: "#fff",
-    },
-  })
-);
+    }),
+  },
+}));
 
 export default function MiniDrawer() {
-  const classes = useStyles();
-  const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -113,12 +87,8 @@ export default function MiniDrawer() {
   const loggedIn = useAppSelector((state) => state.account.loggedIn);
   const cartItemsCount = useAppSelector((state) => selectTotalCartItems(state));
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
+  const toggleDrawer = () => {
+    setOpen(!open);
   };
 
   useEffect(() => {
@@ -130,78 +100,62 @@ export default function MiniDrawer() {
   return (
     <>
       <CssBaseline />
-      <AppBar
-        position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
-        })}
-      >
-        <Toolbar>
+      <AppBar position="absolute" open={open}>
+        <Toolbar sx={{ pr: "24px" }}>
           <IconButton
+            edge="start"
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, {
-              [classes.hide]: open,
-            })}
+            onClick={toggleDrawer}
+            sx={{
+              marginRight: "36px",
+              ...(open && { display: "none" }),
+            }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" className={classes.title}>
+          <Typography
+            component="h1"
+            variant="h6"
+            color="inherit"
+            noWrap
+            sx={{ flexGrow: 1 }}
+          >
             {title}
           </Typography>
           <IconButton
-            className={classes.white_button}
             color="inherit"
             onClick={() => navigate("/cart")}
+            size="large"
           >
-            <Badge badgeContent={cartItemsCount} color="secondary">
+            <Badge badgeContent={cartItemsCount} color="info">
               <ShoppingCartIcon />
             </Badge>
           </IconButton>
           {!loggedIn ? (
-            <Button
-              className={classes.white_button}
-              color="inherit"
-              onClick={() => navigate("/login")}
-            >
+            <Button color="inherit" onClick={() => navigate("/login")}>
               Войти
             </Button>
           ) : (
-            <Button
-              className={classes.white_button}
-              color="inherit"
-              onClick={() => dispatch(logout())}
-            >
+            <Button color="inherit" onClick={() => dispatch(logout())}>
               Выйти
             </Button>
           )}
         </Toolbar>
       </AppBar>
-      <Toolbar id="back-to-top-anchor" />
-      <Drawer
-        variant="permanent"
-        className={clsx(classes.drawer, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
-        })}
-        classes={{
-          paper: clsx({
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open,
-          }),
-        }}
-      >
-        <div className={classes.toolbar}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
+      <Drawer variant="permanent" open={open}>
+        <Toolbar
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            px: [1],
+          }}
+        >
+          <IconButton onClick={toggleDrawer}>
+            <ChevronLeftIcon />
           </IconButton>
-        </div>
+        </Toolbar>
         <Divider />
         <List>
           <ListItem button onClick={() => navigate("/")}>
@@ -216,15 +170,13 @@ export default function MiniDrawer() {
             </ListItemIcon>
             <ListItemText primary="Корзина" />
           </ListItem>
-          {loggedIn ? (
+          {loggedIn && (
             <ListItem button onClick={() => navigate("/account")}>
               <ListItemIcon>
                 <AccountBoxIcon />
               </ListItemIcon>
               <ListItemText primary="Аккаунт" />
             </ListItem>
-          ) : (
-            <></>
           )}
         </List>
       </Drawer>

@@ -5,15 +5,14 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  makeStyles,
   IconButton,
   Box,
   Collapse,
   Chip,
-} from "@material-ui/core";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-import { green, blue, yellow } from "@material-ui/core/colors";
+} from "@mui/material";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { green, blue, yellow } from "@mui/material/colors";
 
 import { Order, OrderStatus } from "../types/ordersTypes";
 import { normalizeOrderStatus, normalizeDate } from "../utils/normalizers";
@@ -21,14 +20,6 @@ import { normalizeOrderStatus, normalizeDate } from "../utils/normalizers";
 interface Props {
   item: Order;
 }
-
-const useRowStyles = makeStyles({
-  root: {
-    "& > *": {
-      borderBottom: "unset",
-    },
-  },
-});
 
 function setChipColor(status: OrderStatus) {
   switch (status) {
@@ -55,13 +46,12 @@ function setChipColor(status: OrderStatus) {
 const Row: React.FC<Props> = (props) => {
   const { item } = props;
   const [open, setOpen] = React.useState(false);
-  const classes = useRowStyles();
 
   const toggleRowExpand = () => setOpen((prevValue) => !prevValue);
 
   return (
-    <React.Fragment>
-      <TableRow className={classes.root}>
+    <>
+      <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
         <TableCell>
           <IconButton
             aria-label="expand row"
@@ -113,7 +103,7 @@ const Row: React.FC<Props> = (props) => {
           </Collapse>
         </TableCell>
       </TableRow>
-    </React.Fragment>
+    </>
   );
 };
 

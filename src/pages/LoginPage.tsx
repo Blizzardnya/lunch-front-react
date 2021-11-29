@@ -1,4 +1,5 @@
 import React from "react";
+import { styled } from "@mui/material/styles";
 import {
   Avatar,
   Button,
@@ -6,31 +7,42 @@ import {
   TextField,
   Typography,
   Container,
-} from "@material-ui/core";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import { makeStyles } from "@material-ui/core/styles";
+} from "@mui/material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
 import { useAppDispatch } from "../redux/hooks";
 import { login } from "../redux/slices/accountSlice";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
+const PREFIX = "LoginPage";
+
+const classes = {
+  paper: `${PREFIX}-paper`,
+  avatar: `${PREFIX}-avatar`,
+  form: `${PREFIX}-form`,
+  submit: `${PREFIX}-submit`,
+};
+
+const StyledContainer = styled(Container)(({ theme }) => ({
+  [`& .${classes.paper}`]: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
   },
-  avatar: {
+
+  [`& .${classes.avatar}`]: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.primary.main,
   },
-  form: {
+
+  [`& .${classes.form}`]: {
     width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
-  submit: {
+
+  [`& .${classes.submit}`]: {
     margin: theme.spacing(3, 0, 2),
     color: "#fff",
   },
@@ -42,7 +54,6 @@ const validationSchema = yup.object({
 });
 
 const LoginPage: React.FC = () => {
-  const classes = useStyles();
   const dispatch = useAppDispatch();
 
   const formik = useFormik({
@@ -58,7 +69,7 @@ const LoginPage: React.FC = () => {
   });
 
   return (
-    <Container component="main" maxWidth="sm">
+    <StyledContainer maxWidth="sm">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -108,7 +119,7 @@ const LoginPage: React.FC = () => {
           </Button>
         </form>
       </div>
-    </Container>
+    </StyledContainer>
   );
 };
 

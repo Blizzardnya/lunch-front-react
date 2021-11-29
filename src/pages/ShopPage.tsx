@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { makeStyles, Container, Grid } from "@material-ui/core";
-import Pagination from "@material-ui/lab/Pagination";
-import SearchBar from "material-ui-search-bar";
+import { styled } from "@mui/material/styles";
+import { Container, Grid } from "@mui/material";
+import Pagination from "@mui/material/Pagination";
+import TextField from "@mui/material/TextField";
 import { useSearchParams } from "react-router-dom";
-import debounce from "lodash/debounce";
 
 import ProductCard from "../components/ProductCard";
 import CategoriesList from "../components/CategoriesList";
@@ -15,15 +15,26 @@ import {
 } from "../redux/slices/productsSlice";
 import { selectAllCategories } from "../redux/slices/categoriesSlice";
 
-const useStyles = makeStyles((theme) => ({
-  cardGrid: {
+const PREFIX = "ShopPage";
+
+const classes = {
+  cardGrid: `${PREFIX}-cardGrid`,
+  searchBar: `${PREFIX}-searchBar`,
+  pagination: `${PREFIX}-pagination`,
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled("div")(({ theme }) => ({
+  [`& .${classes.cardGrid}`]: {
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
   },
-  searchBar: {
+
+  [`& .${classes.searchBar}`]: {
     marginBottom: theme.spacing(2),
   },
-  pagination: {
+
+  [`& .${classes.pagination}`]: {
     marginTop: theme.spacing(2),
   },
 }));
@@ -31,7 +42,6 @@ const useStyles = makeStyles((theme) => ({
 const rowsPerPage = 8;
 
 const ShopPage: React.FC = () => {
-  const classes = useStyles();
   const dispatch = useAppDispatch();
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -58,11 +68,8 @@ const ShopPage: React.FC = () => {
     if (page > pageCount) setSearchParams({ page: "1" });
   }, [setSearchParams, page, pageCount]);
 
-  const setSearch = debounce(
-    (value: string) => setSearchTerm(value.toLowerCase()),
-    1000
-  );
-  const clearSearch = () => setSearchTerm("");
+  const setSearch = (event: any) =>
+    setSearchTerm(event.target.value.toLowerCase());
 
   const setCategory = (id: number | null) => setCurrentCategory(id);
 
@@ -70,17 +77,17 @@ const ShopPage: React.FC = () => {
     setSearchParams({ page: page.toString() });
 
   return (
-    <>
+    <Root>
       <Loading isLoading={productsLoading} />
       <Container className={classes.cardGrid} maxWidth="xl">
         <Grid container spacing={3}>
           <Grid item xs={12} sm={8} md={9} lg={10}>
-            <SearchBar
-              placeholder="Поиск"
+            <TextField
+              fullWidth
+              label="Поиск..."
               value={searchTerm}
               onChange={setSearch}
-              onCancelSearch={clearSearch}
-              className={classes.searchBar}
+              sx={{ marginBottom: 2, backgroundColor: "white" }}
             />
             <Grid container spacing={4}>
               {products
@@ -117,7 +124,7 @@ const ShopPage: React.FC = () => {
           </Grid>
         </Grid>
       </Container>
-    </>
+    </Root>
   );
 };
 

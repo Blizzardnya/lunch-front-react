@@ -1,17 +1,21 @@
 import React from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import useScrollTrigger from "@material-ui/core/useScrollTrigger";
-import Zoom from "@material-ui/core/Zoom";
+import { styled } from "@mui/material/styles";
+import useScrollTrigger from "@mui/material/useScrollTrigger";
+import Zoom from "@mui/material/Zoom";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      position: "fixed",
-      bottom: theme.spacing(2),
-      right: theme.spacing(2),
-    },
-  })
-);
+const PREFIX = "ScrollToTop";
+
+const classes = {
+  root: `${PREFIX}-root`,
+};
+
+const StyledZoom = styled(Zoom)(({ theme }) => ({
+  [`& .${classes.root}`]: {
+    position: "fixed",
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
+  },
+}));
 
 interface Props {
   children: React.ReactElement;
@@ -19,7 +23,7 @@ interface Props {
 
 const ScrollToTop: React.FC<Props> = (props) => {
   const { children } = props;
-  const classes = useStyles();
+
   const trigger = useScrollTrigger();
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -33,11 +37,11 @@ const ScrollToTop: React.FC<Props> = (props) => {
   };
 
   return (
-    <Zoom in={trigger}>
+    <StyledZoom in={trigger}>
       <div onClick={handleClick} role="presentation" className={classes.root}>
         {children}
       </div>
-    </Zoom>
+    </StyledZoom>
   );
 };
 

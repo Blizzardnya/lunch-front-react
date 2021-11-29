@@ -1,5 +1,6 @@
-import { Button, Theme, withStyles } from "@material-ui/core";
-import { green, grey } from "@material-ui/core/colors";
+import { Button, Theme } from "@mui/material";
+import withStyles from '@mui/styles/withStyles';
+import { green, grey } from "@mui/material/colors";
 
 const GreenButton = withStyles((theme: Theme) => ({
   root: {

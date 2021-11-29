@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { styled } from "@mui/material/styles";
 import {
   TableContainer,
   Table,
@@ -7,27 +8,34 @@ import {
   TableCell,
   TableBody,
   Paper,
-  makeStyles,
   Container,
   TablePagination,
-} from "@material-ui/core";
+} from "@mui/material";
 
 import OrderRow from "../components/OrderRow";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { fetchOrders } from "../redux/slices/ordersSlice";
 import Loading from "../components/Loading";
 
-const useStyles = makeStyles((theme) => ({
-  table: {
+const PREFIX = "AccountPage";
+
+const classes = {
+  table: `${PREFIX}-table`,
+  container: `${PREFIX}-container`,
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled("div")(({ theme }) => ({
+  [`& .${classes.table}`]: {
     minWidth: 650,
   },
-  container: {
+
+  [`& .${classes.container}`]: {
     paddingTop: theme.spacing(8),
   },
 }));
 
 const AccountPage: React.FC = () => {
-  const classes = useStyles();
   const dispatch = useAppDispatch();
 
   const orders = useAppSelector((state) => state.orders.orders);
@@ -52,7 +60,7 @@ const AccountPage: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <>
+    <Root>
       <Loading isLoading={ordersLoading} />
       <Container className={classes.container} maxWidth="xl">
         <TableContainer component={Paper}>
@@ -82,10 +90,10 @@ const AccountPage: React.FC = () => {
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Container>
-    </>
+    </Root>
   );
 };
 
