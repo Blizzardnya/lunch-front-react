@@ -10,6 +10,7 @@ import {
   Paper,
   Container,
   TablePagination,
+  TableFooter,
 } from "@mui/material";
 
 import OrderRow from "../components/OrderRow";
@@ -24,7 +25,6 @@ const classes = {
   container: `${PREFIX}-container`,
 };
 
-// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
 const Root = styled("div")(({ theme }) => ({
   [`& .${classes.table}`]: {
     minWidth: 650,
@@ -34,6 +34,8 @@ const Root = styled("div")(({ theme }) => ({
     paddingTop: theme.spacing(8),
   },
 }));
+
+const rowsPerPageOpt = [5, 10, 20];
 
 const AccountPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -81,17 +83,20 @@ const AccountPage: React.FC = () => {
                   <OrderRow key={item.created} item={item} />
                 ))}
             </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={rowsPerPageOpt}
+                  count={orders.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </TableRow>
+            </TableFooter>
           </Table>
         </TableContainer>
-        <TablePagination
-          component="div"
-          rowsPerPageOptions={[5, 10, 20]}
-          count={orders.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
       </Container>
     </Root>
   );

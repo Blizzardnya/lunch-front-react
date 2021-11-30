@@ -4,7 +4,9 @@ import { Category } from "../../types/categoriesTypes";
 import { RootState } from "../store";
 import { fetchProducts } from "./productsSlice";
 
-const categoriesAdapter = createEntityAdapter<Category>();
+const categoriesAdapter = createEntityAdapter<Category>({
+  sortComparer: (a, b) => a.name.localeCompare(b.name),
+});
 
 const initialState = categoriesAdapter.getInitialState();
 

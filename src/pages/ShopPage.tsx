@@ -23,7 +23,6 @@ const classes = {
   pagination: `${PREFIX}-pagination`,
 };
 
-// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
 const Root = styled("div")(({ theme }) => ({
   [`& .${classes.cardGrid}`]: {
     paddingTop: theme.spacing(8),
