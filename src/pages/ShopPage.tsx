@@ -60,7 +60,7 @@ const ShopPage: React.FC = () => {
   );
 
   useEffect(() => {
-    dispatch(fetchProducts());
+    dispatch<any>(fetchProducts());
   }, [dispatch]);
 
   useEffect(() => {

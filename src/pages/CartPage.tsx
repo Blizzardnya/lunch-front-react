@@ -156,7 +156,7 @@ const CartPage: React.FC = () => {
             disabled={!loggedIn}
             className={classes.confirmButton}
             onClick={() =>
-              dispatch(sendOrder({ showMessage: showSuccessMessage }))
+              dispatch<any>(sendOrder({ showMessage: showSuccessMessage }))
             }
             size="large"
           >

@@ -58,7 +58,7 @@ const AccountPage: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchOrders());
+    dispatch<any>(fetchOrders());
   }, [dispatch]);
 
   return (

@@ -64,7 +64,7 @@ const LoginPage: React.FC = () => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       const { username, password } = values;
-      dispatch(login({ username, password }));
+      dispatch<any>(login({ username, password }));
     },
   });
 

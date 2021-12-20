@@ -137,7 +137,7 @@ export default function MiniDrawer() {
               Войти
             </Button>
           ) : (
-            <Button color="inherit" onClick={() => dispatch(logout())}>
+            <Button color="inherit" onClick={() => dispatch<any>(logout())}>
               Выйти
             </Button>
           )}
