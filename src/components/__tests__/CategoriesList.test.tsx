@@ -1,5 +1,6 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+
 import CategoriesList from "../CategoriesList";
 
 test("renders categories", () => {
@@ -8,12 +9,8 @@ test("renders categories", () => {
     { id: 2, name: "Button 2" },
   ];
 
-  const { getByText, getAllByRole } = render(
-    <CategoriesList categories={categories} onCategoryPress={() => {}} />
-  );
+  render(<CategoriesList categories={categories} onCategoryPress={() => {}} />);
 
-  const headerElement = getByText(/Категории/i);
-  const buttons = getAllByRole("button");
-  expect(headerElement).toBeInTheDocument();
-  expect(buttons.length).toEqual(3);
+  expect(screen.getByText("Категории")).toBeInTheDocument();
+  expect(screen.getAllByRole("listitem")).toHaveLength(3);
 });

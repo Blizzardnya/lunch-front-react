@@ -53,7 +53,7 @@ const ProductCard: React.FC<Props> = ({ product }) => {
   const dispatch = useAppDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
-  const addItemToCartF = () => {
+  const addItemToCartWrapper = () => {
     const { id, price } = product;
 
     dispatch(addItemToCart({ id, price, quantity: 1 }));
@@ -79,7 +79,7 @@ const ProductCard: React.FC<Props> = ({ product }) => {
           variant="contained"
           color="primary"
           startIcon={<AddShoppingCartIcon />}
-          onClick={addItemToCartF}
+          onClick={addItemToCartWrapper}
         >
           Добавить
         </GreenButton>

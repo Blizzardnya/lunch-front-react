@@ -157,21 +157,25 @@ export default function MiniDrawer() {
           </IconButton>
         </Toolbar>
         <Divider />
-        <List>
-          <ListItem button onClick={() => navigate("/")}>
+        <List role="menu">
+          <ListItem button onClick={() => navigate("/")} role="menuitem">
             <ListItemIcon>
               <StoreIcon />
             </ListItemIcon>
             <ListItemText primary="Товары" />
           </ListItem>
-          <ListItem button onClick={() => navigate("/cart")}>
+          <ListItem button onClick={() => navigate("/cart")} role="menuitem">
             <ListItemIcon>
               <ShoppingCartIcon />
             </ListItemIcon>
             <ListItemText primary="Корзина" />
           </ListItem>
           {loggedIn && (
-            <ListItem button onClick={() => navigate("/account")}>
+            <ListItem
+              button
+              onClick={() => navigate("/account")}
+              role="menuitem"
+            >
               <ListItemIcon>
                 <AccountBoxIcon />
               </ListItemIcon>

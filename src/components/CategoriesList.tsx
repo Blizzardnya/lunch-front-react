@@ -28,6 +28,7 @@ const CategoriesList: React.FC<Props> = ({ categories, onCategoryPress }) => {
       <List
         component="nav"
         aria-label="categories"
+        role="list"
         subheader={
           <ListSubheader component="div" id="categories-list-subheader">
             Категории
@@ -39,6 +40,7 @@ const CategoriesList: React.FC<Props> = ({ categories, onCategoryPress }) => {
             key={item.id}
             selected={item.id === selectedID}
             onClick={() => handleListItemClick(item.id)}
+            role="listitem"
           >
             <ListItemText primary={item.name} />
           </ListItemButton>
@@ -48,6 +50,7 @@ const CategoriesList: React.FC<Props> = ({ categories, onCategoryPress }) => {
           key={0}
           selected={selectedID === 0}
           onClick={() => handleListItemClick(0)}
+          role="listitem"
         >
           <ListItemText primary="Все" />
         </ListItemButton>
